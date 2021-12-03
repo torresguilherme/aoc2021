@@ -2,35 +2,24 @@ module AOC1 where
 
 import System.IO
 import Control.Monad
-import Data.List (transpose, tails)
 
 readInt :: String -> Int
 readInt = read
 
-countChangesTail :: [Int] -> Int -> Int
-countChangesTail [] x = x
-countChangesTail [_] x = x
-countChangesTail (h:t:ts) x = if t > h then countChangesTail (t:ts) x + 1
-    else countChangesTail (t:ts) x
-
 countChanges :: [Int] -> Int
-countChanges s = countChangesTail s 0
+countChanges xs = length . filter (< 0) $ zipWith (-) xs (tail xs)
 
-sumL :: [Int] -> Int
-sumL = sum
+diffWindow :: [Int] -> [Int] -> Int
+diffWindow a b = sum a - sum b
 
-countWindowTail :: [Int] -> Int -> Int
-countWindowTail [] x = x
-countWindowTail s x = do
-    let window = take 3 s
-    let nextWindow = tail $ take 4 s
-    if sumL nextWindow > sumL window then countWindowTail (tail s) (x + 1)
-    else countWindowTail (tail s) x
+makeWindows :: [Int] -> [[Int]]
+makeWindows (a:b:c:ts) = [a, b, c] : makeWindows (b:c:ts)
+makeWindows _ = []
 
 countWindow :: [Int] -> Int
-countWindow s = countWindowTail s 0
+countWindow xs = countChanges . map sum $ makeWindows xs
 
 aoc1 :: IO ()
 aoc1 = do
     contents <- readFile "input"
-    print $ countWindow (map readInt $ lines contents)
+    print $ countWindow $ map readInt $ lines contents
