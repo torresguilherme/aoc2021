@@ -1,10 +1,7 @@
 module AOC1 where
 
-import System.IO
-import Control.Monad
-
-readInt :: String -> Int
-readInt = read
+import Control.Monad ()
+import Utils ( readInt )
 
 countChanges :: [Int] -> Int
 countChanges xs = length . filter (< 0) $ zipWith (-) xs (tail xs)

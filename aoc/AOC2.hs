@@ -1,25 +1,7 @@
 module AOC2 where
 
-import System.IO
-import Control.Monad
-
-data InputString = InputNumber Int | InputCommand String
-    deriving Show
-
-type Point = (Int, Int)
-type Aim = Int
-type Transform = (Point, Aim)
-
-readInt :: String -> Int 
-readInt = read
-
-readInputTail :: [String] -> [InputString] -> [InputString]
-readInputTail [] acc = acc
-readInputTail [_] acc = acc
-readInputTail (s:n:ts) acc = readInputTail ts (acc ++ [InputCommand s] ++ [InputNumber $ readInt n])
-
-readInput :: [String] -> [InputString]
-readInput s = readInputTail s []
+import Control.Monad ()
+import Utils ( Transform, Point, InputString(..), readInput )
 
 getResultTail :: [InputString] -> Point -> Point
 getResultTail [] x = x

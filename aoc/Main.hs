@@ -5,4 +5,4 @@ import AOC2
 import AOC3
 
 main :: IO ()
-main = aoc1
+main = aoc3
