@@ -1,4 +1,4 @@
-module Main where
+module AOC2 where
 
 import System.IO
 import Control.Monad
@@ -7,6 +7,8 @@ data InputString = InputNumber Int | InputCommand String
     deriving Show
 
 type Point = (Int, Int)
+type Aim = Int
+type Transform = (Point, Aim)
 
 readInt :: String -> Int 
 readInt = read
@@ -33,10 +35,24 @@ getResultTail (InputCommand s : InputNumber n : ts) x
 getResult :: [InputString] -> Point
 getResult s = getResultTail s (0, 0)
 
+getResultAimedTail :: [InputString] -> Transform -> Transform
+getResultAimedTail [] x = x
+getResultAimedTail [_] x = x
+getResultAimedTail (InputNumber _:_:_) x = x
+getResultAimedTail (InputCommand _:InputCommand _:_) x = x
+getResultAimedTail (InputCommand s : InputNumber n : ts) x 
+    | s == "forward" = getResultAimedTail ts ((fst (fst x) + n, snd (fst x) + (snd x * n)), snd x)
+    | s == "up" = getResultAimedTail ts (fst x, snd x - n)
+    | s == "down" = getResultAimedTail ts (fst x, snd x + n)
+    | otherwise = getResultAimedTail ts x
+
+getResultAimed :: [InputString] -> Transform
+getResultAimed s = getResultAimedTail s ((0, 0), 0)
+
 multiplyResult :: Point -> Int
 multiplyResult = uncurry (*)
 
-main :: IO ()
-main = do
+aoc2 :: IO ()
+aoc2 = do
     contents <- readFile "input"
-    print $ multiplyResult $ getResult $ readInput $ words contents
+    print $ multiplyResult $ fst $ getResultAimed $ readInput $ words contents

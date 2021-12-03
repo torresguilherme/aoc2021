@@ -1,4 +1,4 @@
-module Main where
+module AOC1 where
 
 import System.IO
 import Control.Monad
@@ -30,7 +30,7 @@ countWindowTail s x = do
 countWindow :: [Int] -> Int
 countWindow s = countWindowTail s 0
 
-main :: IO ()
-main = do
+aoc1 :: IO ()
+aoc1 = do
     contents <- readFile "input"
     print $ countWindow (map readInt $ lines contents)
