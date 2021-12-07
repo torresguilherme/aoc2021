@@ -28,5 +28,5 @@ readInputTail (s:n:ts) acc = readInputTail ts (acc ++ [InputCommand s] ++ [Input
 readInput :: [String] -> [InputString]
 readInput s = readInputTail s []
 
-readInputCharMat :: String -> [[Char]]
+readInputCharMat :: String -> [String]
 readInputCharMat = lines
